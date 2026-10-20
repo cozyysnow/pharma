@@ -1,0 +1,16 @@
+supplier_id,supplier_name,supplier_type,city,state,lead_time_mean_days,lead_time_sd_days,on_time_probability,full_fill_probability,payment_terms_days,is_synthetic
+SUP01,Aravali Pharma Distributors,Wholesaler,Sonipat,Haryana,2.9,1.6,0.89,0.96,30,1
+SUP02,Yamuna Healthcare Supplies,Wholesaler,Panipat,Haryana,4.9,1.7,0.86,0.95,15,1
+SUP03,Kurukshetra Medico Traders,Regional Distributor,Kurukshetra,Haryana,4.7,0.8,0.93,0.94,45,1
+SUP04,Capital Drug House,Wholesaler,New Delhi,Delhi,4.3,1.3,0.89,0.9,30,1
+SUP05,Northern Lifecare Logistics,Regional Distributor,Gurugram,Haryana,5.1,0.9,0.86,0.92,30,1
+SUP06,Satluj Generics Direct,Manufacturer-Direct,Ludhiana,Punjab,3.1,1.1,0.83,0.86,45,1
+SUP07,Himalaya Valley Pharma Supply,Manufacturer-Direct,Baddi,Himachal Pradesh,5.8,1.6,0.96,0.92,30,1
+SUP08,Doab Medical Agencies,Regional Distributor,Meerut,Uttar Pradesh,2.5,1.2,0.85,0.89,30,1
+SUP09,Ganga Plains Pharma,Wholesaler,Ghaziabad,Uttar Pradesh,5.5,1.6,0.8,0.96,30,1
+SUP10,Rajputana Drug Distributors,Wholesaler,Jaipur,Rajasthan,4.2,1.1,0.83,0.91,45,1
+SUP11,Sapphire Biologicals Supply,Specialist (Cold Chain),Chandigarh,Chandigarh,4.5,0.9,0.89,0.86,15,1
+SUP12,Metro Rx Wholesale,Wholesaler,Faridabad,Haryana,5.4,1.8,0.96,0.89,15,1
+SUP13,Trident Pharma Logistics,Regional Distributor,Rohtak,Haryana,2.2,1.8,0.94,0.89,45,1
+SUP14,Greenfield Generic Direct,Manufacturer-Direct,Panchkula,Haryana,3.2,1.0,0.95,0.91,15,1
+SUP15,Prime Meds Cooperative,Cooperative,Karnal,Haryana,5.0,1.0,0.96,0.97,15,1

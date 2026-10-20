@@ -1,0 +1,12 @@
+category_id,category_name,description
+CAT01,Analgesics & Antipyretics,Pain and fever relief
+CAT02,Antibiotics,Antibacterial agents
+CAT03,Cardiovascular,"Antihypertensives, lipid-lowering, antiplatelets, diuretics"
+CAT04,Antidiabetics,Glucose-lowering agents and insulin
+CAT05,Gastrointestinal,"Acid suppression, antiemetics, rehydration"
+CAT06,Respiratory & Allergy,"Antihistamines, asthma and cough products"
+CAT07,Antifungals & Antiparasitics,"Antifungal, anthelmintic and antimalarial agents"
+CAT08,Neurology & Psychiatry,"Anticonvulsants, antidepressants, anxiolytics"
+CAT09,Vitamins & Supplements,"Vitamins, minerals and nutritional supplements"
+CAT10,Dermatology & Topicals,"Topical anti-infectives, steroids, antiseptics"
+CAT11,"Endocrine, Urology & Others","Thyroid, corticosteroids, urology, gout, contraception"

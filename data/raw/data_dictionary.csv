@@ -1,0 +1,111 @@
+file,column,description
+categories.csv,category_id,"PK, CATnn"
+categories.csv,category_name,Therapeutic category
+categories.csv,description,Category description
+suppliers.csv,supplier_id,"PK, SUPnn"
+suppliers.csv,supplier_name,FICTIONAL supplier name
+suppliers.csv,supplier_type,Supplier channel type
+suppliers.csv,city,Synthetic location
+suppliers.csv,state,Synthetic location
+suppliers.csv,lead_time_mean_days,Mean order lead time (days)
+suppliers.csv,lead_time_sd_days,Std dev of lead time
+suppliers.csv,on_time_probability,P(no extra delay)
+suppliers.csv,full_fill_probability,P(order delivered in full)
+suppliers.csv,payment_terms_days,Payment terms
+suppliers.csv,is_synthetic,1 = synthetic entity
+supplier_disruption_events.csv,event_id,PK
+supplier_disruption_events.csv,supplier_id,FK suppliers
+supplier_disruption_events.csv,start_date,Start
+supplier_disruption_events.csv,end_date,End
+supplier_disruption_events.csv,extra_lead_time_days,Added lead time for orders placed in window
+supplier_disruption_events.csv,full_fill_probability_multiplier,Multiplier on full-fill probability
+medicines.csv,medicine_id,"PK, MEDnnn"
+medicines.csv,generic_name,Generic (INN-style) name
+medicines.csv,display_name,Name + strength + form
+medicines.csv,active_ingredients,Active substance(s) in salt form; ';' separated
+medicines.csv,strength,Strength ('UNVERIFIED' when not confirmed)
+medicines.csv,dosage_form,Dosage form
+medicines.csv,route,Route of administration
+medicines.csv,category_id,FK categories
+medicines.csv,primary_supplier_id,FK suppliers
+medicines.csv,unit_of_measure,Smallest stock-keeping unit
+medicines.csv,pack_size,Units per order pack (orders are multiples)
+medicines.csv,storage_condition,Storage
+medicines.csv,unit_cost_inr_2021,SYNTHETIC unit cost (INR)
+medicines.csv,unit_price_inr_2021,SYNTHETIC unit price (INR)
+medicines.csv,composition_status,VERIFIED_STANDARD_REFERENCE or UNVERIFIED_REQUIRES_REVIEW
+medicines.csv,composition_note,Verification note / indicative info
+medicines.csv,price_is_synthetic,1 = synthetic price
+medicine_suppliers.csv,medicine_id,FK medicines
+medicine_suppliers.csv,supplier_id,FK suppliers
+medicine_suppliers.csv,supplier_role,Primary/Secondary
+medicine_suppliers.csv,order_share,Approx. share of orders
+calendar.csv,date,Date
+calendar.csv,year,Year
+calendar.csv,month,Month
+calendar.csv,day_of_week,0=Mon
+calendar.csv,is_weekend,Sat/Sun
+calendar.csv,season,Synthetic seasons (north-India style)
+inventory_daily.csv,record_id,"PK, RECnnnnnn (shared across daily files)"
+inventory_daily.csv,date,Date
+inventory_daily.csv,medicine_id,FK medicines
+inventory_daily.csv,opening_stock,Units at start of day
+inventory_daily.csv,units_received,Units delivered (start of day)
+inventory_daily.csv,units_sold,Units dispensed
+inventory_daily.csv,wastage_units,Damaged/expired write-off
+inventory_daily.csv,closing_stock,opening+received-sold-wastage
+inventory_daily.csv,units_ordered_today,Order qty placed at end of day (0 if none)
+inventory_daily.csv,on_order_units,"Ordered, undelivered units at end of day"
+inventory_daily.csv,reorder_point,Policy reorder point
+inventory_daily.csv,order_up_to_level,Policy order-up-to level
+demand_sales_daily.csv,record_id,PK/FK
+demand_sales_daily.csv,date,Date
+demand_sales_daily.csv,medicine_id,FK
+demand_sales_daily.csv,units_demanded,Underlying customer demand
+demand_sales_daily.csv,units_sold,"min(demand, available)"
+demand_sales_daily.csv,lost_sales_units,demand - sold
+demand_sales_daily.csv,stockout_flag,1 if lost_sales_units>0
+demand_sales_daily.csv,unit_price_inr,Price incl. 4%/yr synthetic inflation
+demand_sales_daily.csv,sales_revenue_inr,units_sold*unit_price
+replenishment_orders.csv,order_id,"PK, POnnnnnnn"
+replenishment_orders.csv,medicine_id,FK
+replenishment_orders.csv,supplier_id,FK
+replenishment_orders.csv,order_date,Placed date
+replenishment_orders.csv,expected_delivery_date,Order date + supplier mean lead time
+replenishment_orders.csv,actual_delivery_date,Null if in transit at 2025-12-31
+replenishment_orders.csv,lead_time_days,Actual lead time
+replenishment_orders.csv,quantity_ordered,Ordered units
+replenishment_orders.csv,quantity_received,Delivered units (may be partial)
+replenishment_orders.csv,status,Received / Partially_Received / In_Transit_At_Period_End
+replenishment_orders.csv,unit_cost_inr,Synthetic cost
+replenishment_orders.csv,order_value_inr,Ordered qty * cost
+stockout_label_lookahead_2026.csv,medicine_id,FK
+stockout_label_lookahead_2026.csv,date,2026-01-01..07
+stockout_label_lookahead_2026.csv,stockout_flag,Simulated stock-out flag used only to label last 7 days of 2025
+stockout_prediction_dataset.csv,record_id,PK/FK
+stockout_prediction_dataset.csv,date,Date
+stockout_prediction_dataset.csv,medicine_id,FK
+stockout_prediction_dataset.csv,category_id,FK
+stockout_prediction_dataset.csv,supplier_id,Primary supplier
+stockout_prediction_dataset.csv,year,
+stockout_prediction_dataset.csv,month,
+stockout_prediction_dataset.csv,day_of_week,0=Mon
+stockout_prediction_dataset.csv,is_weekend,
+stockout_prediction_dataset.csv,season,
+stockout_prediction_dataset.csv,closing_stock,End-of-day stock
+stockout_prediction_dataset.csv,on_order_units,Outstanding orders
+stockout_prediction_dataset.csv,reorder_point,
+stockout_prediction_dataset.csv,units_demanded,Day-t demand
+stockout_prediction_dataset.csv,units_sold,Day-t sales
+stockout_prediction_dataset.csv,sales_7d_avg,Trailing mean sales incl. day t
+stockout_prediction_dataset.csv,sales_30d_avg,Trailing 30d mean sales
+stockout_prediction_dataset.csv,days_of_cover,closing/sales_30d_avg (cap 365)
+stockout_prediction_dataset.csv,stock_position_cover_days,(closing+on_order)/sales_30d_avg (cap 365)
+stockout_prediction_dataset.csv,days_since_last_receipt,Capped at 365; window start counted as day 0 baseline
+stockout_prediction_dataset.csv,stockout_days_last_30d,Stock-out days in trailing 30d
+stockout_prediction_dataset.csv,supplier_lead_time_mean_days,
+stockout_prediction_dataset.csv,supplier_full_fill_probability,
+stockout_prediction_dataset.csv,supplier_disruption_active,Primary supplier disruption in effect
+stockout_prediction_dataset.csv,unit_price_inr,
+stockout_prediction_dataset.csv,stockout_today,Day-t stock-out
+stockout_prediction_dataset.csv,stockout_next_7d,TARGET: 1 if any stock-out (lost sales) on days t+1..t+7

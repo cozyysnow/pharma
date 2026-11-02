@@ -41,3 +41,4 @@ class BulkAcknowledgeResponse(BaseModel):
 
 class UnreadCountResponse(BaseModel):
     unread_count: int
+

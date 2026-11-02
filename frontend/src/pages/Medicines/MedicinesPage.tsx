@@ -16,8 +16,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../components/feedback/ToastContext';
 import { getMedicines, createMedicine, updateMedicine, deactivateMedicine } from '../../api/medicines';
 import { getSuppliers } from '../../api/suppliers';
-import { MOCK_CATEGORIES } from '../../mocks';
-import type { Medicine, Supplier } from '../../types/domain';
+import { getCategories } from '../../api/categories';
+import type { Medicine, Supplier, Category } from '../../types/domain';
 
 export const MedicinesPage: React.FC = () => {
   const { role } = useAuth();
@@ -27,6 +27,7 @@ export const MedicinesPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('medicines');
   const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [totalMeds, setTotalMeds] = useState(0);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
@@ -56,7 +57,7 @@ export const MedicinesPage: React.FC = () => {
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      const [medsRes, suppsRes] = await Promise.all([
+      const [medsRes, suppsRes, catsRes] = await Promise.all([
         getMedicines({
           search: search || undefined,
           category_id: categoryFilter || undefined,
@@ -65,10 +66,12 @@ export const MedicinesPage: React.FC = () => {
           page_size: PAGE_SIZE,
         }),
         getSuppliers(),
+        getCategories(),
       ]);
       setMedicines(medsRes.data);
       setTotalMeds(medsRes.total);
       setSuppliers(suppsRes);
+      setCategories(catsRes);
     } catch (err) {
       showError('Failed to load medicines directory', String(err));
     } finally {
@@ -360,7 +363,7 @@ export const MedicinesPage: React.FC = () => {
                 onChange={(e) => { setCategoryFilter(e.target.value); setPage(1); }}
               >
                 <option value="">All Categories</option>
-                {MOCK_CATEGORIES.map((c) => (
+                {categories.map((c) => (
                   <option key={c.category_id} value={c.category_id}>
                     {c.category_name}
                   </option>
@@ -456,7 +459,7 @@ export const MedicinesPage: React.FC = () => {
               onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
               required
             >
-              {MOCK_CATEGORIES.map((c) => (
+              {categories.map((c) => (
                 <option key={c.category_id} value={c.category_id}>
                   {c.category_name}
                 </option>

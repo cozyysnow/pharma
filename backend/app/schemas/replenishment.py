@@ -46,3 +46,4 @@ class DismissRecommendationRequest(BaseModel):
 
 class AcceptRecommendationRequest(BaseModel):
     by: Optional[str] = None
+

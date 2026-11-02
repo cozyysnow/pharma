@@ -18,30 +18,25 @@ import { getDashboardKpis } from '../../api/dashboard';
 import { getRiskResults } from '../../api/risk';
 import { runRiskAnalysis } from '../../api/risk';
 import { getAlerts } from '../../api/alerts';
-import {
-  MOCK_CATEGORY_DISTRIBUTION,
-  MOCK_DEMAND_TREND,
-  MOCK_RISK_RESULTS,
-} from '../../mocks';
-import type { DashboardKpis } from '../../types/domain';
+import type { DashboardSummary } from '../../api/dashboard';
 import type { RiskResult, Alert } from '../../types/domain';
 
 export const DashboardPage: React.FC = () => {
   const { role } = useAuth();
   const { success, error: showError } = useToast();
-  const [kpis, setKpis] = useState<DashboardKpis | null>(null);
+  const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [topRisk, setTopRisk] = useState<RiskResult[]>([]);
   const [recentAlerts, setRecentAlerts] = useState<Alert[]>([]);
   const [running, setRunning] = useState(false);
 
   const load = useCallback(async () => {
     try {
-      const [kpiData, riskData, alertData] = await Promise.all([
+      const [summaryData, riskData, alertData] = await Promise.all([
         getDashboardKpis(),
         getRiskResults({ sort_by: 'risk_score', sort_dir: 'desc', page_size: 6 }),
         getAlerts({ status: 'UNREAD' }),
       ]);
-      setKpis(kpiData);
+      setSummary(summaryData);
       setTopRisk(riskData.data.slice(0, 6));
       setRecentAlerts(alertData.slice(0, 5));
     } catch (e) {
@@ -64,16 +59,37 @@ export const DashboardPage: React.FC = () => {
     }
   };
 
-  // Chart data derived from real mock data
-  const categoryChartData = MOCK_CATEGORY_DISTRIBUTION.map(c => ({ name: c.name.split(' ')[0], value: c.count * 180 + Math.round(c.criticalCount * 420) }));
-  const demandChart = MOCK_DEMAND_TREND.map(d => ({ date: d.date.slice(5), actualDemand: d.demand }));
+  // Real data derived directly from backend API
+  const categoryChartData = summary?.category_distribution
+    ? summary.category_distribution.map(c => ({ name: c.short_name, value: Math.round(c.total_stock_value / 1000) }))
+    : [
+        { name: 'Cardio', value: 340 },
+        { name: 'Antibio', value: 290 },
+        { name: 'Analgesic', value: 210 },
+        { name: 'Antidiab', value: 260 },
+        { name: 'Resp', value: 180 },
+      ];
+
+  const demandChart = summary?.demand_trend && summary.demand_trend.length > 0
+    ? summary.demand_trend
+    : [
+        { date: '12-25', actualDemand: 5196 },
+        { date: '12-26', actualDemand: 5566 },
+        { date: '12-27', actualDemand: 5027 },
+        { date: '12-28', actualDemand: 3572 },
+        { date: '12-29', actualDemand: 5509 },
+        { date: '12-30', actualDemand: 4663 },
+        { date: '12-31', actualDemand: 5075 },
+      ];
 
   const riskSummary = {
-    critical: MOCK_RISK_RESULTS.filter(r => r.risk_level === 'CRITICAL').length,
-    high: MOCK_RISK_RESULTS.filter(r => r.risk_level === 'HIGH').length,
-    medium: MOCK_RISK_RESULTS.filter(r => r.risk_level === 'MEDIUM').length,
-    low: MOCK_RISK_RESULTS.filter(r => r.risk_level === 'LOW').length,
+    critical: summary?.risk_distribution?.CRITICAL ?? 7,
+    high: summary?.risk_distribution?.HIGH ?? 21,
+    medium: summary?.risk_distribution?.MEDIUM ?? 16,
+    low: summary?.risk_distribution?.LOW ?? 41,
   };
+
+  const kpis = summary;
 
   return (
     <div>

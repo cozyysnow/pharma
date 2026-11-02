@@ -62,3 +62,4 @@ def run_risk_analysis(
 ):
     """Recomputes stock-out risk, coverage, and required stock across all medicines."""
     return RiskService.run_all(db)
+

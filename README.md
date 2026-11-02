@@ -208,3 +208,4 @@ pharma/
 - [x] Historical risk cross-check report generated (`docs/RISK_CROSS_CHECK_REPORT.md`)
 - [x] Postman collection committed (`docs/pharmastock_postman_collection.json`)
 - [x] Frontend builds cleanly with zero TypeScript errors (`tsc -b`)
+

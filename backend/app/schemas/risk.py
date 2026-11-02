@@ -65,3 +65,4 @@ class RiskRunResponse(BaseModel):
     medium_risk_count: int
     low_risk_count: int
     computed_at: datetime.datetime
+

@@ -424,3 +424,4 @@ class RiskService:
             "explanation": calc["explanation"],
             "factors": calc["factors"],
         }
+

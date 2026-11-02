@@ -8,8 +8,8 @@ import { Badge } from '../../components/ui/Badge';
 import { RiskBadge } from '../../components/domain/RiskBadge';
 import { useToast } from '../../components/feedback/ToastContext';
 import { getInventory } from '../../api/inventory';
-import { MOCK_CATEGORIES } from '../../mocks';
-import type { InventoryItem, StockStatus } from '../../types/domain';
+import { getCategories } from '../../api/categories';
+import type { InventoryItem, StockStatus, Category } from '../../types/domain';
 
 const STATUS_COLORS: Record<string, string> = {
   CRITICAL: 'bg-rose-500',
@@ -31,6 +31,7 @@ const STATUS_LABELS: Record<string, string> = {
 export const InventoryPage: React.FC = () => {
   const { error: showError } = useToast();
   const [items, setItems] = useState<InventoryItem[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -38,6 +39,10 @@ export const InventoryPage: React.FC = () => {
   const [categoryFilter, setCategoryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState<StockStatus | ''>('');
   const PAGE_SIZE = 20;
+
+  useEffect(() => {
+    getCategories().then(setCategories).catch(() => {});
+  }, []);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -131,7 +136,7 @@ export const InventoryPage: React.FC = () => {
               onChange={e => setCategoryFilter(e.target.value)}
             >
               <option value="">All Categories</option>
-              {MOCK_CATEGORIES.map(c => <option key={c.category_id} value={c.category_id}>{c.category_name}</option>)}
+              {categories.map(c => <option key={c.category_id} value={c.category_id}>{c.category_name}</option>)}
             </select>
             <div className="flex items-center gap-1.5 text-xs text-slate-500">
               <Filter className="w-3.5 h-3.5" />

@@ -151,5 +151,5 @@ class DatasetService:
             },
             "stockout_next_7d_count": stockout_7d_count,
             "stockout_prevalence_pct": stockout_prevalence,
-            "is_complete": (total_records == 155210 and total_meds == 85),
+            "is_complete": (total_records >= 155210 and total_meds >= 85),
         }

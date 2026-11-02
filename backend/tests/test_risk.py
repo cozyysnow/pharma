@@ -156,3 +156,4 @@ def test_low_risk_healthy_stock():
 
     assert result["risk_level"] == "LOW"
     assert result["risk_score"] < 30
+

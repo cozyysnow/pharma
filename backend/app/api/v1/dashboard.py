@@ -14,4 +14,4 @@ def get_dashboard_summary(
     db: Session = Depends(get_db),
 ):
     """Retrieve operational dashboard KPIs and risk aggregates."""
-    return DashboardService.get_kpis(db)
+    return DashboardService.get_summary(db)

@@ -9,6 +9,7 @@ export * from './replenishment';
 export * from './forecasts';
 export * from './alerts';
 export * from './suppliers';
+export * from './categories';
 export * from './datasets';
 export * from './auth';
 

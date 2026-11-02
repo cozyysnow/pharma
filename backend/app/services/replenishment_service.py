@@ -305,3 +305,4 @@ class ReplenishmentService:
             "medicine": med,
             "supplier": sup,
         }
+

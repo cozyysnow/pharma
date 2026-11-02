@@ -195,3 +195,4 @@ def test_alert_auto_resolve_when_condition_clears(isolated_db):
     assert len(alerts) >= 2
     for a in alerts:
         assert a["resolved_by"] == "System Auto-Resolve"
+

@@ -61,3 +61,4 @@ export function logoutApi(): void {
   localStorage.removeItem('pharma_refresh_token');
   localStorage.removeItem('pharma_role');
 }
+

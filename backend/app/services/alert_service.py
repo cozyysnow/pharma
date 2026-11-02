@@ -270,3 +270,4 @@ class AlertService:
         )
         db.commit()
         return count
+

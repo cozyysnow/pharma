@@ -13,8 +13,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../components/feedback/ToastContext';
 import { getForecast } from '../../api/forecasts';
 import { getMedicines } from '../../api/medicines';
-import { MOCK_CATEGORIES } from '../../mocks';
-import type { ForecastResult, Medicine } from '../../types/domain';
+import { getCategories } from '../../api/categories';
+import type { ForecastResult, Medicine, Category } from '../../types/domain';
 
 interface ModelMetric {
   modelName: string;
@@ -33,18 +33,22 @@ export const ForecastPage: React.FC = () => {
   const { success, error: showError } = useToast();
 
   const [medicines, setMedicines] = useState<Medicine[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [selectedMedId, setSelectedMedId] = useState('MED002');
   const [horizon, setHorizon] = useState<7 | 14 | 30>(30);
   const [activeTab, setActiveTab] = useState('projection');
   const [forecast, setForecast] = useState<ForecastResult | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Load medicines list
+  // Load medicines and categories list
   useEffect(() => {
     getMedicines({ page_size: 100 })
       .then((res) => {
         setMedicines(res.data);
       })
+      .catch((err) => console.error(err));
+    getCategories()
+      .then(setCategories)
       .catch((err) => console.error(err));
   }, []);
 
@@ -422,7 +426,7 @@ export const ForecastPage: React.FC = () => {
         {/* Tab 3: Category Aggregates */}
         <TabContent value="categories">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {MOCK_CATEGORIES.map((cat, idx) => {
+            {categories.map((cat, idx) => {
               const estDemand = 450 + idx * 85;
               return (
                 <Card key={cat.category_id} className="p-4">

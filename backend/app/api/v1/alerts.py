@@ -95,3 +95,4 @@ def dismiss_alert(
     if not result:
         raise NotFoundException("Alert", alert_id)
     return result
+

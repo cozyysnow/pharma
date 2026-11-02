@@ -101,3 +101,4 @@ npm run dev
    - Explain the **Auto-Resolution Engine**: When inventory is replenished or risk abates, active alerts automatically transition to `RESOLVED` with audit stamp `"System Auto-Resolve"`.
 4. **Header Notification Bell:** Shows live unread alert badge synced with backend.
 5. **Conclusion & Viva Defense:** System satisfies all 10 project development phases, Definition of Done, and zero data-leakage ML pipeline standards.
+

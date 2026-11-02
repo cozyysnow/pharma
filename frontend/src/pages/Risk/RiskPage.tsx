@@ -7,8 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Ca
 import { RiskBadge } from '../../components/domain/RiskBadge';
 import { useToast } from '../../components/feedback/ToastContext';
 import { getRiskResults, runRiskAnalysis } from '../../api/risk';
-import { MOCK_CATEGORIES } from '../../mocks';
-import type { RiskResult, RiskLevel, RiskFactor } from '../../types/domain';
+import { getCategories } from '../../api/categories';
+import type { RiskResult, RiskLevel, RiskFactor, Category } from '../../types/domain';
 
 const RISK_ORDER: Record<string, number> = { CRITICAL: 0, HIGH: 1, MEDIUM: 2, LOW: 3 };
 
@@ -34,6 +34,7 @@ function FactorBar({ factor }: { factor: RiskFactor }) {
 export const RiskPage: React.FC = () => {
   const { success, error: showError } = useToast();
   const [items, setItems] = useState<RiskResult[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -43,6 +44,10 @@ export const RiskPage: React.FC = () => {
   const [levelFilter, setLevelFilter] = useState<RiskLevel | ''>('');
   const [selectedRisk, setSelectedRisk] = useState<RiskResult | null>(null);
   const PAGE_SIZE = 20;
+
+  useEffect(() => {
+    getCategories().then(setCategories).catch(() => {});
+  }, []);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -130,7 +135,7 @@ export const RiskPage: React.FC = () => {
                   onChange={e => setCategoryFilter(e.target.value)}
                 >
                   <option value="">All Categories</option>
-                  {MOCK_CATEGORIES.map(c => <option key={c.category_id} value={c.category_id}>{c.category_name}</option>)}
+                  {categories.map(c => <option key={c.category_id} value={c.category_id}>{c.category_name}</option>)}
                 </select>
               </div>
             </CardContent>

@@ -10,4 +10,5 @@ export * from './forecasts';
 export * from './alerts';
 export * from './suppliers';
 export * from './datasets';
+export * from './auth';
 

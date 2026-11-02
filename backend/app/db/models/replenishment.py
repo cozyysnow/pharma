@@ -1,5 +1,6 @@
 import datetime
 from sqlalchemy import Column, String, Integer, Float, DateTime, Boolean, Text, ForeignKey
+from sqlalchemy.orm import relationship
 from backend.app.db.base import Base
 
 
@@ -25,6 +26,9 @@ class ReplenishmentRecommendation(Base):
     dismissed_by = Column(String(100), nullable=True)
     dismiss_reason = Column(Text, nullable=True)
     po_reference = Column(String(100), nullable=True)
+
+    medicine = relationship("Medicine")
+    supplier = relationship("Supplier")
 
     def __repr__(self) -> str:
         return f"<ReplenishmentRecommendation {self.recommendation_id} {self.medicine_id}: qty={self.recommended_order_quantity} status={self.status}>"

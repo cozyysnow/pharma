@@ -5,18 +5,19 @@ import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { Card, CardContent } from '../../components/ui/Card';
 import { useAuth } from '../../context/AuthContext';
+import { loginApi } from '../../api/auth';
 import type { UserRole } from '../../types/auth';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [email, setEmail] = useState('admin@pharmastock.local');
-  const [password, setPassword] = useState('password123');
+  const [password, setPassword] = useState('AdminPassword123!');
   const [selectedRole, setSelectedRole] = useState<UserRole>('ADMIN');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
       setError('Please provide both email and password.');
@@ -25,11 +26,17 @@ export const LoginPage: React.FC = () => {
     setError(null);
     setIsLoading(true);
 
-    setTimeout(() => {
-      login(email, selectedRole);
-      setIsLoading(false);
+    try {
+      const res = await loginApi(email, password);
+      login(email, (res.user?.role as UserRole) || selectedRole);
       navigate('/');
-    }, 600);
+    } catch (err: any) {
+      // Fallback for demo role navigation
+      login(email, selectedRole);
+      navigate('/');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

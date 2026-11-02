@@ -11,6 +11,10 @@ from backend.app.api.v1.settings import router as settings_router
 from backend.app.api.v1.datasets import router as datasets_router
 from backend.app.api.v1.ml import router as ml_router
 from backend.app.api.v1.forecasts import router as forecasts_router
+from backend.app.api.v1.risk import router as risk_router
+from backend.app.api.v1.alerts import router as alerts_router
+from backend.app.api.v1.replenishment import router as replenishment_router
+from backend.app.api.v1.dashboard import router as dashboard_router
 
 api_v1_router = APIRouter(prefix="/api/v1")
 api_v1_router.include_router(auth_router)
@@ -25,5 +29,9 @@ api_v1_router.include_router(settings_router)
 api_v1_router.include_router(datasets_router)
 api_v1_router.include_router(ml_router)
 api_v1_router.include_router(forecasts_router)
+api_v1_router.include_router(risk_router)
+api_v1_router.include_router(alerts_router)
+api_v1_router.include_router(replenishment_router)
+api_v1_router.include_router(dashboard_router)
 
 __all__ = ["api_v1_router"]

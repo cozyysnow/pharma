@@ -5,8 +5,10 @@ from sqlalchemy.orm import Session
 from backend.app.db.session import get_db
 from backend.app.db.models.user import User
 from backend.app.schemas.medicine import MedicineRead, MedicineCreate, MedicineUpdate
+from backend.app.schemas.risk import CalculationChainRead
 from backend.app.schemas.common import PaginatedResponse, StatusResponse
 from backend.app.services.medicine_service import MedicineService
+from backend.app.services.risk_service import RiskService
 from backend.app.core.deps import require_manager_or_admin
 from backend.app.core.errors import NotFoundException
 
@@ -57,6 +59,18 @@ def get_medicine(
     if not med:
         raise NotFoundException("Medicine", medicine_id)
     return med
+
+
+@router.get("/{medicine_id}/calculation", response_model=CalculationChainRead)
+def get_medicine_calculation(
+    medicine_id: str,
+    db: Session = Depends(get_db),
+):
+    """Retrieve deterministic sufficiency and stock-out calculation chain."""
+    calc = RiskService.get_calculation_chain(db, medicine_id)
+    if not calc:
+        raise NotFoundException("Medicine", medicine_id)
+    return calc
 
 
 @router.post("", response_model=MedicineRead, status_code=status.HTTP_201_CREATED)

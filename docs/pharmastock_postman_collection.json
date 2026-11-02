@@ -1,0 +1,281 @@
+{
+  "info": {
+    "name": "PharmaStock IQ REST API",
+    "_postman_id": "c1f7a40b-789a-4d2b-91bb-a81d09e51cde",
+    "description": "Complete Postman collection for PharmaStock IQ API endpoints, covering authentication, master catalogs, inventory, transactions, demand forecasting, stock-out risk assessment, alerts, and replenishment recommendations.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01. Authentication & System",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": "http://localhost:8000/health"
+          }
+        },
+        {
+          "name": "Login (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.access_token) {",
+                  "    pm.collectionVariables.set('token', jsonData.access_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@pharmastock.local\",\n  \"password\": \"AdminPassword123!\"\n}"
+            },
+            "url": "{{base_url}}/auth/login"
+          }
+        },
+        {
+          "name": "Current User (Me)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/auth/me"
+          }
+        }
+      ]
+    },
+    {
+      "name": "02. Master Catalog (Medicines & Suppliers)",
+      "item": [
+        {
+          "name": "List Categories",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/categories"
+          }
+        },
+        {
+          "name": "List Suppliers",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/suppliers"
+          }
+        },
+        {
+          "name": "List Medicines (Paginated)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/medicines?page=1&page_size=20",
+              "host": ["{{base_url}}"],
+              "path": ["medicines"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "page_size", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Medicine by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/medicines/MED001"
+          }
+        },
+        {
+          "name": "Get Medicine Calculation Chain",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/medicines/MED001/calculation"
+          }
+        }
+      ]
+    },
+    {
+      "name": "03. Inventory & Transactions",
+      "item": [
+        {
+          "name": "List Inventory Items",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/inventory?page=1&page_size=20"
+          }
+        },
+        {
+          "name": "Get Inventory Details",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/inventory/MED001"
+          }
+        },
+        {
+          "name": "List Transactions",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/transactions?page=1&page_size=25"
+          }
+        },
+        {
+          "name": "Create Sale Transaction",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medicine_id\": \"MED001\",\n  \"transaction_type\": \"SALE\",\n  \"quantity\": 5,\n  \"reference_number\": \"RX-2026-0091\",\n  \"notes\": \"Patient dispensing\"\n}"
+            },
+            "url": "{{base_url}}/transactions"
+          }
+        },
+        {
+          "name": "Create Receipt Transaction",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medicine_id\": \"MED001\",\n  \"transaction_type\": \"RECEIPT\",\n  \"quantity\": 50,\n  \"reference_number\": \"GRN-2026-004\",\n  \"notes\": \"Supplier delivery receipt\"\n}"
+            },
+            "url": "{{base_url}}/transactions"
+          }
+        }
+      ]
+    },
+    {
+      "name": "04. Demand Forecasting & ML",
+      "item": [
+        {
+          "name": "List ML Runs & Metrics",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/ml/runs"
+          }
+        },
+        {
+          "name": "Get Medicine Forecast (30-day)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/forecasts/MED001?horizon_days=30"
+          }
+        }
+      ]
+    },
+    {
+      "name": "05. Stock-Out Risk Assessment",
+      "item": [
+        {
+          "name": "List Risk Results (Ranked)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/risk?sort_by=risk_score&sort_dir=desc&page=1&page_size=20"
+          }
+        },
+        {
+          "name": "Get Single Medicine Risk Details",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/risk/MED001"
+          }
+        },
+        {
+          "name": "Trigger Risk Analysis Run",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/risk/run"
+          }
+        }
+      ]
+    },
+    {
+      "name": "06. Replenishment Recommendations",
+      "item": [
+        {
+          "name": "List Pending Recommendations",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/replenishment?status=PENDING"
+          }
+        },
+        {
+          "name": "Trigger Replenishment Generation",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/replenishment/generate"
+          }
+        },
+        {
+          "name": "Export Replenishment CSV",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/replenishment/export"
+          }
+        }
+      ]
+    },
+    {
+      "name": "07. Alerts & Notifications",
+      "item": [
+        {
+          "name": "List Active Alerts",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/alerts?status=UNREAD"
+          }
+        },
+        {
+          "name": "Get Unread Alert Count",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/alerts/unread-count"
+          }
+        },
+        {
+          "name": "Trigger Alert Evaluation",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/alerts/evaluate"
+          }
+        }
+      ]
+    },
+    {
+      "name": "08. Dashboard & Analytics",
+      "item": [
+        {
+          "name": "Get Dashboard KPIs & Summary",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/dashboard/summary"
+          }
+        }
+      ]
+    }
+  ]
+}

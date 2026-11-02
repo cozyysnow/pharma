@@ -1,5 +1,6 @@
 import datetime
 from sqlalchemy import Column, String, Integer, Float, DateTime, Text, ForeignKey
+from sqlalchemy.orm import relationship
 from backend.app.db.base import Base
 
 
@@ -19,5 +20,8 @@ class RiskResult(Base):
     explanation = Column(Text, nullable=False)
     factors_json = Column(Text, nullable=True)
 
+    medicine = relationship("Medicine")
+
     def __repr__(self) -> str:
         return f"<RiskResult {self.medicine_id}: score={self.risk_score} level={self.risk_level}>"
+

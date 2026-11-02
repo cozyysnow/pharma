@@ -1,5 +1,6 @@
 import datetime
 from sqlalchemy import Column, String, DateTime, Text, ForeignKey
+from sqlalchemy.orm import relationship
 from backend.app.db.base import Base
 
 
@@ -18,6 +19,8 @@ class Alert(Base):
     resolved_at = Column(DateTime, nullable=True)
     acknowledged_by = Column(String(100), nullable=True)
     resolved_by = Column(String(100), nullable=True)
+
+    medicine = relationship("Medicine")
 
     def __repr__(self) -> str:
         return f"<Alert {self.alert_id} {self.alert_type} {self.severity} status={self.status}>"

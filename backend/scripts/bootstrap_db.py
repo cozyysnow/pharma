@@ -37,8 +37,9 @@ def bootstrap():
             print(f"[bootstrap] Import complete: {res.daily_records_count} records imported.")
 
             print("[bootstrap] 4/4 Running initial stock-out risk engine...")
-            risk_res = RiskService.run_stockout_risk_engine(db)
-            print(f"[bootstrap] Risk engine evaluated {risk_res.medicines_evaluated} medicines.")
+            risk_res = RiskService.run_all(db)
+            eval_count = risk_res.get("medicines_evaluated", 0) if isinstance(risk_res, dict) else getattr(risk_res, "medicines_evaluated", 0)
+            print(f"[bootstrap] Risk engine evaluated {eval_count} medicines.")
         else:
             print("[bootstrap] 3/4 Database is already populated. Skipping import.")
             print("[bootstrap] 4/4 Ready to serve traffic.")

@@ -187,6 +187,11 @@ class RiskCalculator:
 class RiskService:
     """Orchestrates risk runs and queries across the database."""
 
+    @classmethod
+    def run_stockout_risk_engine(cls, db: Session) -> Dict[str, Any]:
+        """Alias for run_all to ensure compatibility with bootstrap scripts."""
+        return cls.run_all(db)
+
     @staticmethod
     def run_all(db: Session) -> Dict[str, Any]:
         """Calculates risk for all active medicines and stores in risk_results table."""

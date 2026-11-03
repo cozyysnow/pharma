@@ -119,5 +119,16 @@ async def unhandled_exception_handler(request: Request, exc: Exception):
 
 
 # Mount routes
+@app.get("/", tags=["Root"])
+def root():
+    return {
+        "service": settings.PROJECT_NAME,
+        "version": settings.VERSION,
+        "status": "online",
+        "docs_url": "/docs",
+        "health_check": "/health",
+        "api_v1": "/api/v1",
+    }
+
 app.include_router(health_root_router) # exposes /health directly at root as well
 app.include_router(api_v1_router)      # exposes /api/v1/*
